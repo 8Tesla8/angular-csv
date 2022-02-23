@@ -1,0 +1,5 @@
+<button (click)="saveDataInCSV()">Save csv</button>
+
+<input #fileUpload [accept]="'.csv'" type="file" class="file-input" 
+  (change)="importDataFromCSV($event)" hidden="true">
+<button (click)="fileUpload.click()"> Import from csv</button> 
