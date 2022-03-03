@@ -55,6 +55,5 @@ export class AppComponent {
       fileContent,
       new Transaction()
     );
-    debugger;
   }
 }
