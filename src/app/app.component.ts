@@ -40,20 +40,22 @@ export class AppComponent {
 
 
   public async importDataFromCSV(event: any) {
-
-    const file: File = event.target.files[0];
-    let fileContent = await file.text();
-
+    let fileContent = await this.getTextFromFile(event);
     this.importedData = this._csvService.importDataFromCSV(fileContent);
   }
 
   public async importDataFromCSVByType(event: any) {
-    const file: File = event.target.files[0];
-    let fileContent = await file.text();
-
+    let fileContent = await this.getTextFromFile(event);
     this.importedData = this._csvService.importDataFromCSVByType(
       fileContent,
       new Transaction()
     );
+  }
+
+  private async getTextFromFile(event:any){
+    const file: File = event.target.files[0];
+    let fileContent = await file.text();
+
+    return fileContent;
   }
 }
