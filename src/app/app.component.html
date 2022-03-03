@@ -1,5 +1,21 @@
-<button (click)="saveDataInCSV()">Save csv</button>
+<button (click)="saveDataInCSV('simpleData', arrayWithSimpleData)">Save simple data array</button>
+<button (click)="saveDataInCSV('dataWithConstructor', dataWithConstructor)">Save data with constructor array</button>
+<br><br>
 
-<input #fileUpload [accept]="'.csv'" type="file" class="file-input" 
+
+<div>Import simple data</div>
+<input #fileUploadSimple [accept]="'.csv'" type="file" class="file-input" 
   (change)="importDataFromCSV($event)" hidden="true">
+<button (click)="fileUploadSimple.click()"> Import from csv</button> 
+<br><br>
+ 
+
+<div>Import data that has a constructor</div>
+<input #fileUpload [accept]="'.csv'" type="file" class="file-input" 
+  (change)="importDataFromCSVByType($event)" hidden="true">
 <button (click)="fileUpload.click()"> Import from csv</button> 
+<br><br>
+
+
+<div>data from csv</div>
+<div *ngFor="let item of importedData"> {{item | json}}</div>

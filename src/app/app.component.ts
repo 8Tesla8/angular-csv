@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Transaction } from 'src/models/constructor.model';
+import { User } from 'src/models/simple.model';
+import { CsvService } from 'src/services/csv.service';
 
 @Component({
   selector: 'app-root',
@@ -6,34 +9,27 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  public data = [];
+  constructor(private _csvService: CsvService) {}
 
-  public saveDataInCSV(name:string, data: Array<any>): void {
-    if (data.length == 0) return;
+  // all property has a string data type
+  public arrayWithSimpleData: Array<User> = [
+    { name: 'Eve', email: 'eve22@mail.com', city: 'San Francisco' },
+    { name: 'John', email: 'john123@mail.com', city: 'London' },
+    { name: 'Nick', email: 'super0nick@mail.com', city: 'Madrid' },
+  ];
 
-    let keys = Object.keys(data[0]);
-    let keyLine = keys.join(',') + '\n';
+  // complex class all properties has different data type
+  public dataWithConstructor: Array<Transaction> = [
+    { id: '1', amount: 100, wallet: 'sarah wallet', fees: 5, errors: false },
+    { id: '2', amount: 245, wallet: 'alex wallet', fees: 3, errors: true },
+    { id: '3', amount: 78, wallet: 'kate wallet', fees: 4, errors: true },
+  ];
 
-    let csvContent = keyLine;
 
-    let rows:string[] = [];
-    
-    data.forEach((item) => {
-      let values:string[] = [];
-    
-      keys.forEach((key) => {
-        let val:any = item[key];
+  public importedData:Array<any> = [];
 
-        if (val) {
-          val = val.toString();
-        } else {
-          val = '';
-        }
-        values.push(val);
-      });
-      rows.push(values.join(','));
-    });
-    csvContent += rows.join('\n');
+  public saveDataInCSV(name: string, data: Array<any>): void {
+    let csvContent = this._csvService.saveDataInCSV(data);
 
     var hiddenElement = document.createElement('a');
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvContent);
@@ -43,44 +39,22 @@ export class AppComponent {
   }
 
 
-  public async importDataFromCSV(event:any): Promise<Array<string>> {
-
-
-    //make a warning if list is not empty
+  public async importDataFromCSV(event: any) {
 
     const file: File = event.target.files[0];
     let fileContent = await file.text();
 
-    const headers = fileContent.slice(0, fileContent.indexOf('\n')).split(',');
-    const rows = fileContent.slice(fileContent.indexOf('\n') + 1).split('\n');
+    this.importedData = this._csvService.importDataFromCSV(fileContent);
+  }
 
-    let arr:any[] = [];
-    rows.forEach((row) => {
-      let values = row.split(',');
+  public async importDataFromCSVByType(event: any) {
+    const file: File = event.target.files[0];
+    let fileContent = await file.text();
 
-      let obj:any = new Object();
-
-      for (let index = 0; index < headers.length; index++) {
-        const key:string = headers[index];
-
-        let val:any = values[index];
-        if (val === '') {
-          val = null;
-        }
-
-        obj[key] = val;
-      }
-
-      let intKeys:string[] = ['laneNumber', 'exerciseDefinitionId'];
-      intKeys.forEach((key) => {
-        if (obj[key]) {
-          obj[key] = parseInt(obj[key]);
-        }
-      });
-
-      arr.push(obj);
-    });
-
-    return arr;
+    this.importedData = this._csvService.importDataFromCSVByType(
+      fileContent,
+      new Transaction()
+    );
+    debugger;
   }
 }
