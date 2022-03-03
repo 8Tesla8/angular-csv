@@ -4,10 +4,10 @@ export class CsvService {
       return '';
     }
 
-    let propertyNames = Object.keys(data[0]); // property names of the object
-    let columnWithPropertyNames = propertyNames.join(',') + '\n';
+    let propertyNames = Object.keys(data[0]);
+    let rowWithPropertyNames = propertyNames.join(',') + '\n';
 
-    let csvContent = columnWithPropertyNames;
+    let csvContent = rowWithPropertyNames;
 
     let rows: string[] = [];
 
