@@ -3,14 +3,14 @@
 <br><br>
 
 
-<div>Import simple data</div>
+<div>Export simple data</div>
 <input #fileUploadSimple [accept]="'.csv'" type="file" class="file-input" 
   (change)="importDataFromCSV($event)" hidden="true">
 <button (click)="fileUploadSimple.click()"> Import from csv</button> 
 <br><br>
  
 
-<div>Import data that has a constructor</div>
+<div>Export data that has a constructor</div>
 <input #fileUpload [accept]="'.csv'" type="file" class="file-input" 
   (change)="importDataFromCSVByType($event)" hidden="true">
 <button (click)="fileUpload.click()"> Import from csv</button> 
